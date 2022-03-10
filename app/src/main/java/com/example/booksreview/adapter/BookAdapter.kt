@@ -13,7 +13,7 @@ import com.example.booksreview.model.Book
  * RecyclerView 를 사용하기 위한 Adapter Class
  *
  */
-class BookAdapter : ListAdapter<Book, BookAdapter.BookItemViewHolder>(diffUtil) {
+class BookAdapter(private val itemClickedListener: (Book) -> Unit) : ListAdapter<Book, BookAdapter.BookItemViewHolder>(diffUtil) {
 
     // layout 에 item_book.xml 의 이름에 맞춰서 ItemBookBinding 으로 이름을 설정하면 databinding 으로 임포트 가능
     inner class BookItemViewHolder(private val binding: ItemBookBinding) :
@@ -22,6 +22,10 @@ class BookAdapter : ListAdapter<Book, BookAdapter.BookItemViewHolder>(diffUtil) 
         fun bind(bookModel: Book) {
             binding.titleTextView.text = bookModel.title
             binding.descriptionTextView.text = bookModel.description
+
+            binding.root.setOnClickListener { // binding.root 를 클릭했을때 itemClickedListener()가 호출됨
+                itemClickedListener(bookModel)
+            }
 
             Glide.with(binding.coverImageView.context)
                 .load(bookModel.coverSmallUrl)

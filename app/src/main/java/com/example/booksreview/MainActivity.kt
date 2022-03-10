@@ -1,5 +1,6 @@
 package com.example.booksreview
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -121,7 +122,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initBookRecyclerView() {
-        adapter = BookAdapter()
+        adapter = BookAdapter(itemClickedListener = {
+            val intent = Intent(this, DetailActivity::class.java)
+            intent.putExtra("BookModel", it) // Book 은 data class 이기 때문에 하나하나 따로 보낼 수있지만 직렬화를 시켜서 한번에 보내는 것이 좋음
+            startActivity(intent)
+        })
 
         binding.bookRecyclerView.layoutManager = LinearLayoutManager(this)
         binding.bookRecyclerView.adapter = adapter
